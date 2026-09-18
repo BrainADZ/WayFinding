@@ -1,0 +1,327 @@
+.admin-loading,
+.admin-login {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at top, #e9f1ff, #f7f9fc 48%);
+  color: #102447;
+}
+.admin-loading span {
+  width: 42px;
+  height: 42px;
+  border: 4px solid #dce7f7;
+  border-top-color: #2864ff;
+  border-radius: 50%;
+  animation: admin-spin 0.8s linear infinite;
+}
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.admin-login section {
+  width: min(430px, calc(100% - 30px));
+  padding: 38px;
+  border: 1px solid #dce5f1;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 25px 70px #1736651c;
+  text-align: center;
+}
+.admin-login .logo {
+  width: 160px;
+}
+.admin-login-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin: 28px auto 15px;
+  place-items: center;
+  border-radius: 16px;
+  color: #fff;
+  background: #2864ff;
+}
+.admin-login h1 {
+  margin: 0;
+  font-size: 27px;
+}
+.admin-login p {
+  margin: 8px 0 25px;
+  color: #71819a;
+}
+.admin-login form,
+.admin-grid aside form {
+  display: grid;
+  gap: 16px;
+  text-align: left;
+}
+.admin-login label,
+.admin-grid label {
+  display: grid;
+  gap: 7px;
+  color: #31435d;
+  font-size: 13px;
+  font-weight: 700;
+}
+.admin-login input,
+.admin-grid input,
+.admin-grid select {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #d6e0ec;
+  border-radius: 12px;
+  background: #f9fbfd;
+  color: #102447;
+  outline: none;
+}
+.admin-login input:focus,
+.admin-grid input:focus,
+.admin-grid select:focus {
+  border-color: #2864ff;
+  box-shadow: 0 0 0 3px #2864ff1c;
+}
+.admin-login form button,
+.admin-grid form button {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  background: #2864ff;
+  font-weight: 800;
+}
+.admin-warning,
+.admin-error {
+  margin: 12px 0;
+  padding: 11px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.admin-warning {
+  color: #845500;
+  background: #fff5d9;
+}
+.admin-error {
+  color: #ad2635;
+  background: #fff0f2;
+}
+.admin-shell {
+  min-height: 100dvh;
+  background: #f5f7fb;
+  color: #102447;
+}
+.admin-shell > header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 5vw, 70px);
+  border-bottom: 1px solid #dde5ef;
+  background: #fff;
+}
+.admin-shell > header > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.admin-shell > header .logo {
+  width: 145px;
+}
+.admin-shell > header span {
+  padding-left: 20px;
+  border-left: 1px solid #dbe3ed;
+  font-weight: 800;
+}
+.admin-shell > header button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  color: #53647d;
+  background: #fff;
+}
+.admin-body {
+  width: min(1240px, calc(100% - 32px));
+  margin: auto;
+  padding: 36px 0;
+}
+.admin-title,
+.admin-title > div {
+  display: flex;
+  align-items: center;
+}
+.admin-title {
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+.admin-title > div {
+  gap: 14px;
+}
+.admin-title > div > span {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 14px;
+  color: #2864ff;
+  background: #eaf1ff;
+}
+.admin-title h1 {
+  margin: 0;
+  font-size: 28px;
+}
+.admin-title p {
+  margin: 5px 0 0;
+  color: #71819a;
+}
+.admin-title > b {
+  padding: 9px 14px;
+  border-radius: 20px;
+  color: #2864ff;
+  background: #eaf1ff;
+}
+.admin-grid {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 22px;
+}
+.admin-grid aside,
+.admin-list {
+  border: 1px solid #dde5ef;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 30px #2337550d;
+}
+.admin-grid aside {
+  height: max-content;
+  padding: 22px;
+}
+.admin-grid aside h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 20px;
+  font-size: 18px;
+}
+.admin-grid aside small {
+  display: block;
+  margin-top: 16px;
+  color: #8290a4;
+  line-height: 1.5;
+}
+.admin-list {
+  padding: 20px;
+  overflow: hidden;
+}
+.admin-list-tools {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.admin-list-tools label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #d8e1ec;
+  border-radius: 11px;
+  color: #75849a;
+}
+.admin-list-tools input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+}
+.admin-list-tools select {
+  padding: 0 12px;
+  border: 1px solid #d8e1ec;
+  border-radius: 11px;
+  background: #fff;
+}
+.admin-row {
+  display: grid;
+  grid-template-columns: minmax(190px, 1.6fr) 1fr 1fr 0.7fr 40px;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 8px 12px;
+  border-top: 1px solid #edf1f5;
+  color: #5e6e84;
+  font-size: 13px;
+}
+.admin-head {
+  min-height: 38px;
+  border-top: 0;
+  color: #8996a8;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #172b49;
+}
+.admin-brand i {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 10px;
+  color: #2864ff;
+  background: #edf3ff;
+}
+.admin-brand svg {
+  width: 18px;
+}
+.admin-row > button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  color: #d24251;
+  background: #fff0f2;
+}
+.admin-empty {
+  padding: 60px;
+  text-align: center;
+  color: #8996a8;
+}
+@media (max-width: 800px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-title > b {
+    display: none;
+  }
+  .admin-list {
+    padding: 12px;
+  }
+  .admin-row {
+    grid-template-columns: minmax(145px, 1.5fr) 1fr 40px;
+  }
+  .admin-row > span:nth-child(3),
+  .admin-row > span:nth-child(4) {
+    display: none;
+  }
+  .admin-list-tools {
+    flex-direction: column;
+  }
+  .admin-list-tools select {
+    height: 44px;
+  }
+  .admin-shell > header span {
+    display: none;
+  }
+}

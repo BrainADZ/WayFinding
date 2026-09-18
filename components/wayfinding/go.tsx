@@ -37,6 +37,7 @@ export function Go({
     : (data.devices[0]?.routeStartNode ?? "n-g-start");
   const [accessible, setAccessible] = useState(initialAccessible);
   const [step, setStep] = useState(0);
+  const [completed, setCompleted] = useState(false);
   const route = useMemo(
     () =>
       destination
@@ -57,6 +58,7 @@ export function Go({
   );
   useEffect(() => {
     setStep(0);
+    setCompleted(false);
   }, [accessible]);
   useEffect(() => {
     if (current?.floorId) setActiveFloor(current.floorId);
@@ -135,6 +137,7 @@ export function Go({
           panelOpen={false}
           focusNodeId={current.nodeId}
           onFullscreen={() => mapRoot.current?.requestFullscreen()}
+          performanceMode
         />
       </section>
 
@@ -150,22 +153,32 @@ export function Go({
             {data.floors.find((floor) => floor.id === current.floorId)?.name}
           </span>
         </div>
-        <div className="go-instruction-main">
+        <div
+          className={"go-instruction-main " + (completed ? "completed" : "")}
+        >
           <span className="go-turn-icon">
-            {current.connector ? (
+            {completed ? (
+              <Check size={23} />
+            ) : current.connector ? (
               <Accessibility size={23} />
             ) : (
               <Navigation size={23} />
             )}
           </span>
           <div>
-            <h1>{current.text}</h1>
+            <h1>
+              {completed
+                ? `You have arrived at ${destination.name}`
+                : current.text}
+            </h1>
             <p>
-              {current.connector
-                ? "Floor change ahead"
-                : current.distance
-                  ? `${Math.round(current.distance)} metres`
-                  : "You have arrived"}
+              {completed
+                ? "Route complete"
+                : current.connector
+                  ? "Floor change ahead"
+                  : current.distance
+                    ? `${Math.round(current.distance)} metres`
+                    : "You have arrived"}
             </p>
           </div>
         </div>
@@ -180,12 +193,20 @@ export function Go({
           <button
             type="button"
             className="go-next"
-            disabled={atEnd}
+            disabled={completed}
             onClick={() =>
-              setStep((value) => Math.min(route.steps.length - 1, value + 1))
+              atEnd
+                ? setCompleted(true)
+                : setStep((value) =>
+                    Math.min(route.steps.length - 1, value + 1),
+                  )
             }
           >
-            {atEnd ? (
+            {completed ? (
+              <>
+                <Check size={20} /> Completed
+              </>
+            ) : atEnd ? (
               <>
                 <Check size={20} /> Arrived
               </>

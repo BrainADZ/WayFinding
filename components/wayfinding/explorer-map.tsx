@@ -30,6 +30,7 @@ export function ExplorerMap({
   panelOpen,
   focusNodeId,
   onFullscreen,
+  performanceMode = false,
 }: {
   data: Snapshot;
   places: MapPlace[];
@@ -42,6 +43,7 @@ export function ExplorerMap({
   panelOpen: boolean;
   focusNodeId?: string;
   onFullscreen: () => void;
+  performanceMode?: boolean;
 }) {
   const svg = useRef<SVGSVGElement>(null);
   const drag = useRef<{
@@ -236,7 +238,11 @@ export function ExplorerMap({
         </defs>
         <rect x="-5000" y="-5000" width="10000" height="10000" fill="#f7f6f1" />
         {isReference && (
-          <ReferenceFloor selectedId={selectedId} floorId={floorId} />
+          <ReferenceFloor
+            selectedId={selectedId}
+            floorId={floorId}
+            performanceMode={performanceMode}
+          />
         )}
         <g
           transform={
@@ -581,20 +587,22 @@ export function ExplorerMap({
                   stroke="#fff"
                   strokeWidth={isReference ? 1.5 : 3}
                 />
-                <foreignObject
-                  x={active ? -16 : isReference ? -7 : -10}
-                  y={active ? -16 : isReference ? -7 : -10}
-                  width={active ? 32 : isReference ? 14 : 20}
-                  height={active ? 32 : isReference ? 14 : 20}
-                  pointerEvents="none"
-                >
-                  <div className="site-pin-icon">
-                    <PlaceIcon
-                      place={place}
-                      size={active ? 32 : isReference ? 14 : 20}
-                    />
-                  </div>
-                </foreignObject>
+                {(!performanceMode || active) && (
+                  <foreignObject
+                    x={active ? -16 : isReference ? -7 : -10}
+                    y={active ? -16 : isReference ? -7 : -10}
+                    width={active ? 32 : isReference ? 14 : 20}
+                    height={active ? 32 : isReference ? 14 : 20}
+                    pointerEvents="none"
+                  >
+                    <div className="site-pin-icon">
+                      <PlaceIcon
+                        place={place}
+                        size={active ? 32 : isReference ? 14 : 20}
+                      />
+                    </div>
+                  </foreignObject>
+                )}
                 {active && (
                   <>
                     <path

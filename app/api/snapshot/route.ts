@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { demo } from "../../../packages/domain/seed";
-export function GET() {
-  return NextResponse.json(demo);
+import { managedSnapshot } from "../../../packages/brand-store";
+export async function GET() {
+  return NextResponse.json(await managedSnapshot());
 }

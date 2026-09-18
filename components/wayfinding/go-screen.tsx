@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Snapshot } from "../../packages/domain";
 import { cloneData } from "./shared";
 import { Go } from "./go";
@@ -15,7 +15,15 @@ export default function GoScreen({
   originNodeId?: string;
   accessible?: boolean;
 }) {
-  const [data] = useState<Snapshot>(() => createReferenceSnapshot(cloneData()));
+  const [data, setData] = useState<Snapshot>(() =>
+    createReferenceSnapshot(cloneData()),
+  );
+  useEffect(() => {
+    fetch("/api/snapshot", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((snapshot: Snapshot) => setData(snapshot))
+      .catch(() => undefined);
+  }, []);
   return (
     <Go
       data={data}

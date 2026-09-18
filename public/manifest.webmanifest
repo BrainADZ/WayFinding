@@ -1,1 +1,19 @@
-{"name":"BrainADZ Way Go","short_name":"Way Go","start_url":"/go","display":"standalone","background_color":"#f6f8fc","theme_color":"#0866ff","icons":[{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
+{
+  "name": "BrainADZ Way Kiosk",
+  "short_name": "WayEzy",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#f6f8fc",
+  "theme_color": "#0866ff",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

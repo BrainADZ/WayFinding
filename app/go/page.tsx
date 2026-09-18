@@ -1,4 +1,5 @@
 import GoScreen from "../../components/wayfinding/go-screen";
+import { redirect } from "next/navigation";
 
 export default async function GoPage({
   searchParams,
@@ -10,6 +11,7 @@ export default async function GoPage({
   }>;
 }) {
   const { destination, origin, accessible } = await searchParams;
+  if (!destination) redirect("/");
   return (
     <GoScreen
       destinationId={destination}

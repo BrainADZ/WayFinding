@@ -274,6 +274,9 @@ test("phone handoff uses the current kiosk map and compact guidance", async ({
   await expect(page.getByLabel("Current route map")).toBeVisible();
   await expect(page.locator(".go-map .reference-floor")).toBeVisible();
   await expect(page.locator(".go-map .map-canvas")).toHaveCount(0);
+  expect(
+    await page.locator(".go-map foreignObject").count(),
+  ).toBeLessThanOrEqual(1);
   await expect(page.getByText(/Step 1 of/)).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Next", exact: true }),
@@ -287,4 +290,23 @@ test("phone handoff uses the current kiosk map and compact guidance", async ({
     path: "test-results/mobile-route.png",
     fullPage: true,
   });
+});
+
+test("installed app opens the kiosk and mobile arrival can be completed", async ({
+  page,
+  request,
+}) => {
+  const manifest = await (
+    await request.get(`${baseURL}/manifest.webmanifest`)
+  ).json();
+  expect(manifest.start_url).toBe("/");
+  await page.goto(`${baseURL}/go`);
+  await expect(page).toHaveURL(`${baseURL}/`);
+  await page.goto(`${baseURL}/go?destination=ref-zara&origin=n-g-start`);
+  const next = page.getByRole("button", { name: "Next", exact: true });
+  while (await next.isVisible().catch(() => false)) await next.click();
+  const arrived = page.getByRole("button", { name: "Arrived", exact: true });
+  await expect(arrived).toBeEnabled();
+  await arrived.click();
+  await expect(page.getByText("Route complete")).toBeVisible();
 });

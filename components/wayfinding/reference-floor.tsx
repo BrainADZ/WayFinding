@@ -8,9 +8,11 @@ import { upperStores, upperAnchors } from "./upper-floor-layout";
 export function ReferenceFloor({
   selectedId,
   floorId = "g",
+  performanceMode = false,
 }: {
   selectedId?: string;
   floorId?: string;
+  performanceMode?: boolean;
 }) {
   const upper = ["l1", "l2", "l3"].includes(floorId);
   const stores = upper
@@ -47,33 +49,37 @@ export function ReferenceFloor({
         <clipPath id="reference-shell">
           <path d={referenceOutline} />
         </clipPath>
-        <filter id="reference-paper">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency=".7"
-            numOctaves="2"
-            stitchTiles="stitch"
-          />
-          <feColorMatrix type="saturate" values="0" />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope=".07" />
-          </feComponentTransfer>
-        </filter>
-        <filter
-          id={`unit-shadow-${floorId}`}
-          x="-20%"
-          y="-20%"
-          width="150%"
-          height="160%"
-        >
-          <feDropShadow
-            dx="2"
-            dy="5"
-            stdDeviation="3"
-            floodColor="#66706f"
-            floodOpacity=".2"
-          />
-        </filter>
+        {!performanceMode && (
+          <filter id="reference-paper">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency=".7"
+              numOctaves="2"
+              stitchTiles="stitch"
+            />
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncA type="linear" slope=".07" />
+            </feComponentTransfer>
+          </filter>
+        )}
+        {!performanceMode && (
+          <filter
+            id={`unit-shadow-${floorId}`}
+            x="-20%"
+            y="-20%"
+            width="150%"
+            height="160%"
+          >
+            <feDropShadow
+              dx="2"
+              dy="5"
+              stdDeviation="3"
+              floodColor="#66706f"
+              floodOpacity=".2"
+            />
+          </filter>
+        )}
         <linearGradient id={`unit-face-${floorId}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#ffffff" />
           <stop offset="1" stopColor="#f0f1f0" />
@@ -106,10 +112,12 @@ export function ReferenceFloor({
           stroke="#e6e3dc"
           strokeWidth="6"
         />
-        <path
-          d="M338 626L453 670L584 800L686 806L605 1070L184 1070Z"
-          filter="url(#reference-paper)"
-        />
+        {!performanceMode && (
+          <path
+            d="M338 626L453 670L584 800L686 806L605 1070L184 1070Z"
+            filter="url(#reference-paper)"
+          />
+        )}
         <path d="M-40 961L73 934L103 971L72 1080L-50 1080Z" fill="#8bcde0" />
         <path
           d="M870 735L924 555L1008 589L961 780Z M814 939L900 891L970 944L928 1068L790 1073Z"
@@ -152,22 +160,28 @@ export function ReferenceFloor({
           strokeWidth="5"
         />
         <g clipPath="url(#reference-shell)">
+          {!performanceMode && (
+            <g
+              className="reference-unit-depth"
+              transform="translate(3 7)"
+              opacity=".88"
+            >
+              {units.map((points, i) => (
+                <polygon
+                  key={`depth-${i}`}
+                  points={points.map((p) => p.join(",")).join(" ")}
+                  fill="#c9cdcb"
+                  stroke="#bec3c1"
+                  strokeWidth="1"
+                />
+              ))}
+            </g>
+          )}
           <g
-            className="reference-unit-depth"
-            transform="translate(3 7)"
-            opacity=".88"
+            filter={
+              performanceMode ? undefined : `url(#unit-shadow-${floorId})`
+            }
           >
-            {units.map((points, i) => (
-              <polygon
-                key={`depth-${i}`}
-                points={points.map((p) => p.join(",")).join(" ")}
-                fill="#c9cdcb"
-                stroke="#bec3c1"
-                strokeWidth="1"
-              />
-            ))}
-          </g>
-          <g filter={`url(#unit-shadow-${floorId})`}>
             {units.map((points, i) => (
               <polygon
                 key={i}
