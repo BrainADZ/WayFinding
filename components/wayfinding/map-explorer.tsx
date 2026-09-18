@@ -887,7 +887,7 @@ export function MapExplorer({
                 <ArrowLeft size={22} />
               </button>
               {step === route.steps.length - 1 ? (
-                <button className="explorer-primary" onClick={closePanel}>
+                <button className="explorer-primary" onClick={onReturnToAd}>
                   <Check size={18} /> Done
                 </button>
               ) : (

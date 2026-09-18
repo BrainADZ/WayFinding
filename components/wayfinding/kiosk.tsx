@@ -19,8 +19,8 @@ export function Kiosk({
   };
   useEffect(() => {
     const timer = setInterval(() => {
-      if (!ad && Date.now() - lastActivity.current > 120000) setAd(true);
-    }, 1000);
+      if (!ad && Date.now() - lastActivity.current >= 12000) setAd(true);
+    }, 250);
     return () => clearInterval(timer);
   }, [ad]);
 
@@ -59,12 +59,7 @@ export function Kiosk({
     );
 
   return (
-    <div
-      onPointerDown={touch}
-      onPointerMove={touch}
-      onKeyDown={touch}
-      onWheel={touch}
-    >
+    <div onPointerDown={touch} onKeyDown={touch} onWheel={touch}>
       <MapExplorer data={data} onReturnToAd={() => setAd(true)} />
     </div>
   );

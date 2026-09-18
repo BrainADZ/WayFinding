@@ -52,6 +52,8 @@ export function ExplorerMap({
     moved: boolean;
   } | null>(null);
   const [camera, setCamera] = useState({ x: 750, y: 500, zoom: 1 });
+  const cameraRef = useRef(camera);
+  const wheelCommit = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [size, setSize] = useState({ width: 1440, height: 850 });
   const arrowId = `route-arrow-${useId().replace(/:/g, "")}`;
   const isReference = ["g", "l1", "l2", "l3"].includes(floorId);
@@ -63,6 +65,28 @@ export function ExplorerMap({
     ? Math.max(960, (1060 * size.width) / size.height)
     : 1500;
   const width = baseWidth / camera.zoom;
+  function previewCamera(next: typeof camera) {
+    cameraRef.current = next;
+    const nextWidth = baseWidth / next.zoom;
+    const nextHeight = (nextWidth * size.height) / size.width;
+    svg.current?.setAttribute(
+      "viewBox",
+      `${next.x - nextWidth / 2} ${next.y - nextHeight / 2} ${nextWidth} ${nextHeight}`,
+    );
+  }
+  function commitCamera(next: typeof camera) {
+    previewCamera(next);
+    setCamera(next);
+  }
+  useEffect(() => {
+    cameraRef.current = camera;
+  }, [camera]);
+  useEffect(
+    () => () => {
+      if (wheelCommit.current) clearTimeout(wheelCommit.current);
+    },
+    [],
+  );
   useEffect(() => {
     setCamera({
       x: isReference ? 470 : 750,
@@ -118,10 +142,16 @@ export function ExplorerMap({
   ]);
 
   function zoomBy(amount: number) {
-    setCamera((current) => ({
-      ...current,
-      zoom: Math.max(0.55, Math.min(3.5, current.zoom + amount)),
-    }));
+    const next = {
+      ...cameraRef.current,
+      zoom: Math.max(0.55, Math.min(3.5, cameraRef.current.zoom + amount)),
+    };
+    previewCamera(next);
+    if (wheelCommit.current) clearTimeout(wheelCommit.current);
+    wheelCommit.current = setTimeout(
+      () => setCamera({ ...cameraRef.current }),
+      80,
+    );
   }
 
   return (
@@ -141,8 +171,8 @@ export function ExplorerMap({
           drag.current = {
             x: event.clientX,
             y: event.clientY,
-            cx: camera.x,
-            cy: camera.y,
+            cx: cameraRef.current.x,
+            cy: cameraRef.current.y,
             moved: false,
           };
           event.currentTarget.setPointerCapture(event.pointerId);
@@ -153,16 +183,20 @@ export function ExplorerMap({
             dy = event.clientY - drag.current.y;
           drag.current.moved = Math.abs(dx) + Math.abs(dy) > 4;
           const { cx, cy } = drag.current;
-          setCamera((current) => ({
-            ...current,
-            x: cx - (dx * width) / size.width,
-            y: cy - (dy * height) / size.height,
-          }));
+          const nextWidth = baseWidth / cameraRef.current.zoom;
+          const nextHeight = (nextWidth * size.height) / size.width;
+          previewCamera({
+            ...cameraRef.current,
+            x: cx - (dx * nextWidth) / size.width,
+            y: cy - (dy * nextHeight) / size.height,
+          });
         }}
         onPointerUp={() => {
+          setCamera({ ...cameraRef.current });
           drag.current = null;
         }}
         onPointerCancel={() => {
+          setCamera({ ...cameraRef.current });
           drag.current = null;
         }}
         onWheel={(event) => zoomBy(event.deltaY < 0 ? 0.12 : -0.12)}
@@ -690,7 +724,7 @@ export function ExplorerMap({
           type="button"
           aria-label="Fit map"
           onClick={() =>
-            setCamera({
+            commitCamera({
               x: isReference ? 470 : 750,
               y: isReference ? 510 : 500,
               zoom: 1,

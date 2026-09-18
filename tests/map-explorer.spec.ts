@@ -208,11 +208,23 @@ test("header search, filtering, details and accessible guided route", async ({
   await page.getByRole("button", { name: "Next direction" }).click();
   await page.locator(".explorer-step").last().click();
   await page.getByRole("button", { name: "Done", exact: true }).click();
-  await expect(page.getByLabel("Step-by-step directions")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Find", exact: true }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("kiosk returns to the ad after 12 seconds without activity", async ({
+  page,
+}) => {
   await expect(
     page.getByRole("region", { name: "Search the mall" }),
   ).toBeVisible();
-  expect(errors).toEqual([]);
+  await expect(
+    page.getByRole("button", { name: "Find", exact: true }),
+  ).toBeVisible({
+    timeout: 13000,
+  });
 });
 
 test("mobile search, amenities, floor filter, map controls and Escape", async ({
